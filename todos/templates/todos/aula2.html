@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Lista de Tarefas</title>
+    <style>
+        /* Estilos básicos para deixar a lista mais agradável */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha no topo, não no centro vertical */
+            min-height: 100vh;
+            margin: 20px; /* Margem para não colar nas bordas */
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px; /* Largura máxima para a caixa */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .input-group input[type="text"] {
+            flex-grow: 1; /* Faz o input ocupar o espaço disponível */
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px; /* Bordas arredondadas só na esquerda */
+            font-size: 16px;
+        }
+        .input-group button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0; /* Bordas arredondadas só na direita */
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+        .input-group button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none; /* Remove os marcadores de lista padrão */
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            background-color: #e9ecef;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            color: #495057;
+            transition: background-color 0.2s ease;
+        }
+        li:last-child {
+            margin-bottom: 0; /* Remove margem do último item */
+        }
+        li.completed {
+            background-color: #d4edda; /* Cor para tarefa completada */
+            text-decoration: line-through; /* Risca o texto */
+            color: #28a745; /* Cor do texto para tarefa completada */
+        }
+        li .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        li .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minha Lista de Tarefas</h1>
+
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Adicione uma nova tarefa...">
+            <button id="addTaskBtn">Adicionar</button>
+        </div>
+
+        <ul id="taskList">
+            </ul>
+    </div>
+
+    <script>
+        // Seleciona os elementos HTML que vamos manipular
+        const taskInput = document.getElementById('taskInput');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const taskList = document.getElementById('taskList');
+
+        // Função para adicionar uma nova tarefa
+        function addTask() {
+            const taskText = taskInput.value.trim(); // Pega o texto do input e remove espaços em branco
+
+            if (taskText === "") { // Se o input estiver vazio, não faz nada
+                alert("Por favor, digite uma tarefa!");
+                return;
+            }
+
+            // Cria um novo item de lista (<li>)
+            const listItem = document.createElement('li');
+            listItem.textContent = taskText; // Define o texto do item como o texto da tarefa
+
+            // Cria um botão de exclusão
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Excluir';
+            deleteBtn.className = 'delete-btn'; // Adiciona uma classe para estilização
+            deleteBtn.onclick = function() {
+                taskList.removeChild(listItem); // Remove o item da lista quando o botão é clicado
+            };
+
+            // Adiciona o botão de exclusão ao item da lista
+            listItem.appendChild(deleteBtn);
+
+            // Adiciona um evento de clique para marcar/desmarcar a tarefa como completa
+            listItem.onclick = function(event) {
+                // Impede que o clique no botão de exclusão também marque a tarefa
+                if (event.target !== deleteBtn) {
+                    listItem.classList.toggle('completed'); // Alterna a classe 'completed' para estilização
+                }
+            };
+
+            // Adiciona o novo item à lista de tarefas (<ul>)
+            taskList.appendChild(listItem);
+
+            taskInput.value = ""; // Limpa o input após adicionar a tarefa
+            taskInput.focus(); // Coloca o foco de volta no input
+        }
+
+        // Adiciona a função addTask ao clique do botão
+        addTaskBtn.addEventListener('click', addTask);
+
+        // Permite adicionar a tarefa pressionando "Enter" no campo de input
+        taskInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+</html>
